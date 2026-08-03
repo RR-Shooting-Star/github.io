@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>데굴데굴별똥별</title>
+<style>
+@keyframes twinkle{ 0%,100%{opacity:.15;} 50%{opacity:1;} }
+@keyframes drift{ from{transform:translateY(0);} to{transform:translateY(-40px);} }
+@keyframes fadeUp{ from{opacity:0; transform:translateY(16px);} to{opacity:1; transform:translateY(0);} }
+@keyframes shootingstar{
+  0%{transform:translate(0,0) rotate(-35deg); opacity:0;}
+  4%{opacity:1;}
+  12%{opacity:0;}
+  100%{transform:translate(-320px,220px) rotate(-35deg); opacity:0;}
+}
+@keyframes glow{ 0%,100%{text-shadow:0 0 18px rgba(240,213,138,.5);} 50%{text-shadow:0 0 30px rgba(240,213,138,.85);} }
+@keyframes cloudDrift{ from{transform:translateX(-40px);} to{transform:translateX(40px);} }
+@keyframes sunPulse{ 0%,100%{opacity:.85;} 50%{opacity:1;} }
+
+:root{
+  --bg-deep:#100a24; --bg-mid:#1c1240; --glow:#4b2f8a44;
+  --ink:#f4f0ff; --ink2:#b3a8d4; --ink3:#9a8fc4; --accent:#f0d58a; --accent2:#b9a6ef;
+  --accent-border:rgba(240,213,138,.3); --accent-border-soft:rgba(240,213,138,.18); --accent-border-hover:rgba(240,213,138,.5);
+  --accent-fill:rgba(240,213,138,.14); --card-bg:rgba(255,255,255,.04); --card-bg-hover:rgba(255,255,255,.06);
+  --tool-bg:rgba(255,255,255,.03); --tool-border:rgba(240,213,138,.14);
+  --featured-text:#1c1240; --footer-color:#7a6f9e;
+  --sky-obj-opacity:1; --sun-opacity:0;
+}
+body.day{
+  --bg-deep:#ffe9c7; --bg-mid:#ffd9a0; --glow:#ffbf7a77;
+  --ink:#4a2f18; --ink2:#8a6438; --ink3:#a2703c; --accent:#c9752f; --accent2:#b8894a;
+  --accent-border:rgba(201,117,47,.35); --accent-border-soft:rgba(201,117,47,.25); --accent-border-hover:rgba(201,117,47,.6);
+  --accent-fill:rgba(201,117,47,.14); --card-bg:rgba(255,255,255,.5); --card-bg-hover:rgba(255,255,255,.72);
+  --tool-bg:rgba(255,255,255,.45); --tool-border:rgba(201,117,47,.22);
+  --featured-text:#fff8ec; --footer-color:#a2793f;
+  --sky-obj-opacity:0; --sun-opacity:1;
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0; min-height:100vh; position:relative; overflow-x:hidden;
+  background:radial-gradient(ellipse 1000px 600px at 50% -10%, var(--glow), transparent 60%),
+    linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-mid) 45%, var(--bg-deep) 100%);
+  color:var(--ink); font-family:"Malgun Gothic","Apple SD Gothic Neo",sans-serif; line-height:1.8;
+  transition:background 1s ease, color .6s ease;
+}
+h1,h2{font-family:"Nanum Myeongjo","Noto Serif KR",Georgia,serif; font-weight:400; margin:0;}
+a{color:var(--accent);}
+
+.stars{position:fixed; inset:0; z-index:0; pointer-events:none; opacity:var(--sky-obj-opacity); transition:opacity 1s ease;}
+.star{position:absolute; border-radius:50%; background:#fff; animation:twinkle ease-in-out infinite;}
+.shooting{position:fixed; z-index:1; pointer-events:none; opacity:var(--sky-obj-opacity); transition:opacity 1s ease;}
+.shooting span{position:absolute; width:120px; height:2px;
+  background:linear-gradient(90deg, #f0d58a, transparent); animation:shootingstar linear infinite;}
+
+.sun{position:fixed; top:-80px; right:8%; width:220px; height:220px; border-radius:50%; z-index:0; pointer-events:none;
+  background:radial-gradient(circle, #fff3d6 0%, #ffd9a0aa 45%, transparent 72%);
+  opacity:var(--sun-opacity); transition:opacity 1s ease; animation:sunPulse 5s ease-in-out infinite;}
+.cloud{position:fixed; z-index:0; pointer-events:none; opacity:var(--sun-opacity); transition:opacity 1s ease;
+  background:#fff; border-radius:50px; filter:blur(1px); animation:cloudDrift ease-in-out infinite alternate;}
+
+header.topbar{position:relative; z-index:10; display:flex; justify-content:flex-end; padding:20px;}
+#themeToggle{background:var(--accent-fill); border:1px solid var(--accent-border); color:var(--accent);
+  border-radius:50%; width:38px; height:38px; font-size:1.05rem; display:flex; align-items:center; justify-content:center;
+  cursor:pointer; -webkit-tap-highlight-color:transparent;}
+#themeToggle:hover{background:var(--accent-fill);}
+
+main{position:relative; z-index:5; max-width:880px; margin:0 auto; padding:20px 20px 100px;}
+
+.hero{text-align:center; margin-bottom:60px;}
+.hero .eyebrow{font-size:.7rem; letter-spacing:.4em; color:var(--accent2); text-transform:uppercase; margin-bottom:18px; animation:fadeUp 1s ease both;}
+.logo{max-width:340px; width:80%; height:auto; margin:0 auto 8px; display:block;
+  filter:drop-shadow(0 0 22px rgba(240,213,138,.4)); animation:fadeUp 1s ease .1s both;}
+.hero .desc{color:var(--ink2); max-width:520px; margin:0 auto; animation:fadeUp 1s ease .2s both;}
+.contact-link{display:inline-block; margin-top:22px; font-size:.85rem; border:1px solid var(--accent-border); border-radius:20px;
+  padding:8px 20px; text-decoration:none; color:var(--accent); animation:fadeUp 1s ease .3s both;}
+.contact-link:hover{background:var(--accent-fill);}
+
+.gold-rule{height:1px; width:70px; background:linear-gradient(90deg, transparent, var(--accent), transparent); margin:24px auto;}
+
+.legend{display:flex; gap:18px; flex-wrap:wrap; justify-content:center; font-size:.78rem; color:var(--accent2); margin:0 0 46px;}
+.legend span{display:inline-flex; align-items:center; gap:6px;}
+.dot{width:9px; height:9px; border-radius:50%; display:inline-block;}
+.dot.safe{background:#7fcf9f;} .dot.unsafe{background:#e0899a;} .dot.both{background:#c9baf0;}
+
+.subhead{font-size:.78rem; color:var(--ink3); margin:56px 0 18px; letter-spacing:.35em; text-transform:uppercase; text-align:center;}
+
+.work-list{display:flex; flex-direction:column; gap:12px;}
+.work{background:var(--card-bg); border:1px solid var(--accent-border-soft); border-radius:12px;
+  padding:22px 24px; display:flex; flex-wrap:wrap; justify-content:space-between; gap:14px; align-items:flex-start;
+  transition:border-color .2s, background .2s;}
+.work:hover{border-color:var(--accent-border-hover); background:var(--card-bg-hover);}
+.work-main{flex:1 1 320px;}
+.work-title{display:flex; align-items:center; gap:10px; margin-bottom:6px;}
+.work-title h2{font-size:1.12rem; color:var(--ink);}
+.work-tag{color:var(--ink2); font-size:.86rem; max-width:560px;}
+.work-links{display:flex; gap:10px; flex-wrap:wrap; flex-shrink:0;}
+.work-links a{font-size:.78rem; border:1px solid var(--accent-border); border-radius:20px; padding:6px 14px;
+  text-decoration:none; color:var(--accent); white-space:nowrap;}
+.work-links a:hover{background:var(--accent-fill);}
+.work-links a.safe{color:#7fcf9f; border-color:rgba(127,207,159,.4);}
+.work-links a.unsafe{color:#e0899a; border-color:rgba(224,137,154,.4);}
+.work-links a.featured{background:var(--accent); color:var(--featured-text); border-color:var(--accent); font-weight:600;}
+.work-links a.featured:hover{background:var(--accent2);}
+
+.tool-list{display:flex; flex-direction:column; gap:10px;}
+.tool{background:var(--tool-bg); border:1px solid var(--tool-border); border-radius:10px;
+  padding:16px 22px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;}
+.tool-title{font-size:.92rem; color:var(--ink);}
+.tool-desc{color:var(--ink2); font-size:.8rem;}
+.tool a{font-size:.78rem; border:1px solid var(--accent-border); border-radius:20px; padding:6px 14px; text-decoration:none; color:var(--accent);}
+.tool a:hover{background:var(--accent-fill);}
+
+footer{position:relative; z-index:5; text-align:center; color:var(--footer-color); font-size:.78rem; padding:50px 20px 30px;}
+</style>
+</head>
+<body>
+
+<div class="stars" id="starField"></div>
+<div class="shooting" id="shootingField"></div>
+<div class="sun"></div>
+
+<header class="topbar">
+  <button id="themeToggle" aria-label="배경 밝기 전환">🌕</button>
+</header>
+
+<main>
+  <div class="hero">
+    <div class="eyebrow">Welcome to my little universe</div>
+    <img class="logo" src="logo.png" alt="데굴데굴별똥별">
+    <div class="gold-rule"></div>
+    <p class="desc">세계관과 이야기를 만듭니다. 별똥별처럼 뚝 떨어진 이 페이지에서, 제 작품들을 천천히 둘러봐 주세요.</p>
+    <a class="contact-link" href="https://open.kakao.com/o/szf4HcEi" target="_blank" rel="noopener">💬 소통창구 바로가기</a>
+  </div>
+
+  <div class="legend">
+    <span><span class="dot safe"></span>세이프티 버전</span>
+    <span><span class="dot unsafe"></span>언세이프티 버전</span>
+    <span><span class="dot both"></span>둘 다 포함</span>
+  </div>
+
+  <div class="subhead">✦ 시리즈 작품 ✦</div>
+  <div class="work-list">
+    <div class="work">
+      <div class="work-main">
+        <div class="work-title"><span class="dot both"></span><h2>신들이 사라진 세계: 아르카디아 대륙</h2></div>
+        <p class="work-tag">500년 전 신들이 사라진 대륙, 카르테 자유도시를 중심으로 일곱 국가가 저마다의 사정으로 내부 분열을 겪는 세계관 시리즈. 국가·인물·신 기록까지 정리된 세계관 가이드 사이트가 따로 있습니다.</p>
+      </div>
+      <div class="work-links"><a class="featured" href="https://rr-shooting-star.github.io/arcadia-guide/index.html" target="_blank" rel="noopener">세계관 가이드 보기 →</a></div>
+    </div>
+  </div>
+
+  <div class="subhead">✦ 개인 작품 ✦</div>
+  <div class="work-list">
+    <div class="work">
+      <div class="work-main">
+        <div class="work-title"><span class="dot unsafe"></span><h2>어느새 떨어진 너에게</h2></div>
+        <p class="work-tag">어느 밤, 하늘에서 떨어진 정체불명의 소녀 데벨리아. 상처도 기억도 없는 그녀를 데려와 함께 지내며 천천히 서로를 알아가는 이야기.</p>
+      </div>
+      <div class="work-links"><a class="unsafe" href="https://genit.ai/ko/contents/56a4a7e0-8065-4e68-8a38-3dced49016f8" target="_blank" rel="noopener">genit에서 보기 →</a></div>
+    </div>
+    <div class="work">
+      <div class="work-main">
+        <div class="work-title"><span class="dot unsafe"></span><h2>노예상!! 퇴직하게 해주세요!</h2></div>
+        <p class="work-tag">오랫동안 노예들을 좋은 주인에게만 팔아온 노예상. 이제는 그리던 퇴직을 하려 하는데...</p>
+      </div>
+      <div class="work-links"><a class="unsafe" href="https://genit.ai" target="_blank" rel="noopener">genit에서 찾아보기 →</a></div>
+    </div>
+    <div class="work">
+      <div class="work-main">
+        <div class="work-title"><span class="dot both"></span><h2>월하육루전 (月下六樓傳)</h2></div>
+        <p class="work-tag">고된 기다림 끝에 연월향의 지배자, 월하각의 각주 자리에 오른 당신. 새로 부임한 여섯 누각주 — 윤청아, 하연, 설유화, 백월, 은설, 진서린 — 와 친목을 다져야 한다.</p>
+      </div>
+      <div class="work-links">
+        <a class="safe" href="https://genit.ai/ko/contents/ab957aea-b633-434a-bbed-4bb2580bed51" target="_blank" rel="noopener">세이프티 버전 →</a>
+        <a class="unsafe" href="https://genit.ai/ko/contents/890218d5-8537-4bc1-ba21-1e8d34e35c39" target="_blank" rel="noopener">언세이프티 버전 →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="subhead">✦ 공유 프로그램 ✦</div>
+  <div class="tool-list">
+    <div class="tool">
+      <div>
+        <div class="tool-title">NAI 전용 메타데이터 제거기</div>
+        <div class="tool-desc">NAI로 뽑은 이미지에 남아있는 메타데이터를 간편하게 지우는 프로그램 (NAI 외 이미지도 가능)</div>
+      </div>
+      <a href="https://m.dcinside.com/board/genit/10811?headid=40" target="_blank" rel="noopener">설명 및 다운로드 →</a>
+    </div>
+    <div class="tool">
+      <div>
+        <div class="tool-title">Canvas → HTML 디자이너</div>
+        <div class="tool-desc">Figma처럼 캔버스에서 디자인한 뒤 간단하게 HTML로 변환해주는 도구</div>
+      </div>
+      <a href="https://gall.dcinside.com/mgallery/board/view/?id=genit&no=11513&page=1" target="_blank" rel="noopener">설명 및 다운로드 →</a>
+    </div>
+  </div>
+</main>
+
+<footer>✦ © 데굴데굴별똥별 ✦</footer>
+
+<script>
+// 별 뿌리기
+const starField = document.getElementById('starField');
+for(let i=0;i<120;i++){
+  const s = document.createElement('div');
+  s.className = 'star';
+  const size = Math.random()*2 + 0.6;
+  s.style.width = size+'px';
+  s.style.height = size+'px';
+  s.style.left = (Math.random()*100)+'vw';
+  s.style.top = (Math.random()*100)+'vh';
+  s.style.animationDuration = (2 + Math.random()*4)+'s';
+  s.style.animationDelay = '-'+(Math.random()*5)+'s';
+  starField.appendChild(s);
+}
+
+// 가끔 떨어지는 별똥별
+const shootingField = document.getElementById('shootingField');
+function spawnShootingStar(){
+  if(document.body.classList.contains('day')) return;
+  const s = document.createElement('span');
+  s.style.top = (Math.random()*40)+'vh';
+  s.style.left = (60 + Math.random()*35)+'vw';
+  s.style.animationDuration = '1.6s';
+  shootingField.appendChild(s);
+  setTimeout(()=> s.remove(), 1700);
+}
+setInterval(spawnShootingStar, 3200);
+spawnShootingStar();
+
+// 아침 하늘 구름 뿌리기
+const cloudSpecs = [
+  {top:'12vh', left:'8vw', w:120, h:36},
+  {top:'20vh', left:'62vw', w:160, h:44},
+  {top:'32vh', left:'30vw', w:100, h:30},
+  {top:'8vh', left:'75vw', w:90, h:26}
+];
+cloudSpecs.forEach((c,i)=>{
+  const cloud = document.createElement('div');
+  cloud.className = 'cloud';
+  cloud.style.top = c.top;
+  cloud.style.left = c.left;
+  cloud.style.width = c.w+'px';
+  cloud.style.height = c.h+'px';
+  cloud.style.animationDuration = (10 + i*3)+'s';
+  document.body.appendChild(cloud);
+});
+
+// 밤(별빛) / 아침(해와 구름) 전환
+const themeToggle = document.getElementById('themeToggle');
+function applyDay(isDay){
+  document.body.classList.toggle('day', isDay);
+  themeToggle.textContent = isDay ? '☀️' : '🌕';
+  localStorage.setItem('portfolio_day', isDay ? '1':'0');
+}
+themeToggle.addEventListener('click', ()=> applyDay(!document.body.classList.contains('day')));
+applyDay(localStorage.getItem('portfolio_day') === '1');
+</script>
+</body>
+</html>
