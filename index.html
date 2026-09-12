@@ -74,8 +74,9 @@ main{position:relative; z-index:5; max-width:880px; margin:0 auto; padding:20px 
 .logo{max-width:340px; width:80%; height:auto; margin:0 auto 8px; display:block;
   filter:drop-shadow(0 0 22px rgba(240,213,138,.4)); animation:fadeUp 1s ease .1s both;}
 .hero .desc{color:var(--ink2); max-width:520px; margin:0 auto; animation:fadeUp 1s ease .2s both;}
-.contact-link{display:inline-block; margin-top:22px; font-size:.85rem; border:1px solid var(--accent-border); border-radius:20px;
-  padding:8px 20px; text-decoration:none; color:var(--accent); animation:fadeUp 1s ease .3s both;}
+.hero-links{display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:22px; animation:fadeUp 1s ease .3s both;}
+.contact-link{display:inline-block; font-size:.85rem; border:1px solid var(--accent-border); border-radius:20px;
+  padding:8px 20px; text-decoration:none; color:var(--accent);}
 .contact-link:hover{background:var(--accent-fill);}
 
 .gold-rule{height:1px; width:70px; background:linear-gradient(90deg, transparent, var(--accent), transparent); margin:24px auto;}
@@ -149,7 +150,10 @@ footer{position:relative; z-index:5; text-align:center; color:var(--footer-color
     <img class="logo" src="logo.png" alt="데굴데굴별똥별">
     <div class="gold-rule"></div>
     <p class="desc">안뇽하세요,데굴데굴별똥별의 세계관과 작품을 정리해둔 사이트입니다</p>
-    <a class="contact-link" href="https://open.kakao.com/o/szf4HcEi" target="_blank" rel="noopener">💬 소통창구 바로가기</a>
+    <div class="hero-links">
+      <a class="contact-link" href="https://open.kakao.com/o/szf4HcEi" target="_blank" rel="noopener">💬 소통창구 바로가기</a>
+      <a class="contact-link" href="https://arca.live/b/rollingstar" target="_blank" rel="noopener">⭐ 개인 채널</a>
+    </div>
   </div>
 
   <div class="legend">
